@@ -57,16 +57,17 @@ const useUserStore = defineStore(
             // 若头像地址既不是 http:// 也不是 https:// 开头
             if (avatar.indexOf("http://") === -1 && avatar.indexOf("https://") === -1) {
               if (avatar) {
-                // 有相对路径头像，则拼接服务器基础地址
-                avatar = import.meta.env.VITE_BASE_URL + avatar
+                // 有相对路径头像: 拼接静态资源前缀(后端挂在 /profile), 去掉重复的斜杠
+                const base = (import.meta.env.VITE_APP_PROFILE_API || '').replace(/\/+$/, '')
+                avatar = base + '/' + String(avatar).replace(/^\/+/, '')
               } else {
                 // 无头像时使用默认头像
                 avatar = defaultAvatar
               }
             }
             // 将用户信息更新到仓库状态
-            this.id = user.id
-            this.name = user.name
+            this.id = user.userId
+            this.name = user.userName
             this.avatar = avatar
             // 返回原始响应数据供调用方使用
             resolve(res)

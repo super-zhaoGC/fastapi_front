@@ -78,7 +78,7 @@ export default defineConfig(({ mode, command }) => {
 
       // 代理配置（解决跨域问题）
       proxy: {
-        // 将所有以 /api/v1 开头的请求代理到后端服务器
+        // 将所有以 /api 开头的请求代理到后端服务器
         '/api': {
           // 目标服务器地址
           target: 'http://localhost:8080',
@@ -96,7 +96,12 @@ export default defineConfig(({ mode, command }) => {
            * - 浏览器有同源策略限制
            * - 代理让前端看起来和后端在同一域名下
            */
-          rewrite: (p) => p.replace(/^\/api\/v1/, '')
+          rewrite: (p) => p.replace(/^\/api/, '')
+        },
+        // 用户头像等上传文件（后端 app.mount('/profile')），不做路径改写
+        '/profile': {
+          target: 'http://localhost:8080',
+          changeOrigin: true
         }
       }
     },

@@ -12,7 +12,7 @@
             <el-input v-model="loginForm.userName" size="large" placeholder="请输入用户名" />
           </el-form-item>
           <el-form-item prop="password">
-            <el-input v-model="loginForm.password" size="large" placeholder="请输入密码" />
+            <el-input type="password" v-model="loginForm.password" size="large" placeholder="请输入密码" />
           </el-form-item>
 
           <el-form-item style="width: 100%;">
@@ -36,9 +36,13 @@
 
 <script setup>
 import { ref } from "vue";
-
+import useUserStore from "@/stores/modules/userStore";
+import { useRouter } from "vue-router";
+const router = useRouter()
 //加载状态
 const loading = ref(false)
+
+const userStore = useUserStore()
 
 //表单实例
 const loginRef = ref()
@@ -66,6 +70,12 @@ const handleLogin = () => {
       //打开加载状态
       loading.value = true
       //调用登录方法 TODO
+      userStore.login(loginForm.value).then(res => {
+        const redirectPath = "/"
+        router.push(redirectPath)
+      }).catch(() => {
+        loading.value = false
+      })
     }
   })
 }

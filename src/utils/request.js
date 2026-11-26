@@ -7,7 +7,7 @@ import { getToken } from '@/utils/auth'
 import useUserStore from '@/stores/modules/userStore'
 
 // 全局标记：是否已弹出"重新登录"提示框，避免重复弹出
-let isReLogin = {
+export let isReLogin = {
   show: false
 }
 
@@ -106,7 +106,7 @@ request.interceptors.request.use(
 // 响应拦截器：统一处理后端返回的数据和错误
 request.interceptors.response.use(res => {
   // 如果请求的是文件流（blob），直接返回原始数据
-  if (['blob'.includes(res.request.responseType)]) {
+  if (res.config?.responseType === 'blob') {
     return res.data
   }
   // 从响应中取出业务状态码和提示信息，无则赋予默认值

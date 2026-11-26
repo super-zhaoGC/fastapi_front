@@ -1,6 +1,5 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-//引入路由守卫
+//引入路由守卫（内部只在守卫回调里取 store，因此可以安全地提前 import）
 import '@/views/permission.js'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
@@ -11,12 +10,14 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import App from './App.vue'
 import router from './router'
 import './assets/css/index.css'
+// 只保留这一个 Pinia 实例（stores/index.js 中 createPinia 出来的那个）
 import store from './stores/index.js'
 
 
 
 const app = createApp(App)
 
+// 先安装 Pinia，再安装路由：保证路由首次导航时守卫里能取到已激活的 store
 app.use(store)
 app.use(router)
 app.use(ElementPlus)
