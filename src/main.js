@@ -14,6 +14,10 @@ import './assets/styles/index.css'
 import store from './stores/index.js'
 //引入自定义图标组件
 import SvgIcon from '@/components/SvgIcon'
+// 注册 SVG 雪碧图：vite-plugin-svg-icons 通过这个虚拟模块把 src/assets/icons/svg 下的
+// 所有图标编译成 <symbol id="icon-xxx"> 注入到 body，SvgIcon 组件里的 <use href="#icon-xxx"> 才能取到图形。
+// 少了这一行，<use> 引用的是不存在的 id，图标就是空白（不报错，只是看不见）。
+import 'virtual:svg-icons-register'
 
 
 
