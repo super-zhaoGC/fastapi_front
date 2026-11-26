@@ -79,7 +79,7 @@ export default defineConfig(({ mode, command }) => {
       // 代理配置（解决跨域问题）
       proxy: {
         // 将所有以 /api/v1 开头的请求代理到后端服务器
-        '/api/v1': {
+        '/api': {
           // 目标服务器地址
           target: 'http://localhost:8080',
 
@@ -88,7 +88,7 @@ export default defineConfig(({ mode, command }) => {
 
           /**
            * 代理配置工作原理：
-           * 前端：http://localhost:90/api/v1/selectUserByUserName/{userName} →
+           * 前端：http://localhost:90/api/selectUserByUserName/{userName} →
            * Vite代理转发 →
            * 后端：http://localhost:8080/selectUserByUserName/{userName}
            * 为什么需要代理？

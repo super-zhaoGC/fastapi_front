@@ -6,6 +6,22 @@ import Layout from '@/views/layout'
 
 const constantRoutes = [
   {
+    path:"/login",
+    component:()=>import('@/views/login/index.vue'),
+    hidden:true,
+    meta:{
+      title:'登录'
+    }
+  },
+  {
+    path:"/register",
+    component:()=>import('@/views/register/index.vue'),
+    hidden:true,
+    meta:{
+      title:'注册'
+    }
+  },
+  {
     path:'/',
     component:Layout,
     redirect:'index',
