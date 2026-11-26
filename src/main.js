@@ -11,10 +11,13 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import App from './App.vue'
 import router from './router'
 import './assets/css/index.css'
+import store from './stores/index.js'
+
+
 
 const app = createApp(App)
 
-app.use(createPinia())
+app.use(store)
 app.use(router)
 app.use(ElementPlus)
 

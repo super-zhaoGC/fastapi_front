@@ -4,6 +4,7 @@ import axios from 'axios'
 import { ElMessage, ElMessageBox } from 'element-plus'
 // 引入获取本地存储 token 的工具函数
 import { getToken } from '@/utils/auth'
+import useUserStore from '@/stores/modules/userStore'
 
 // 全局标记：是否已弹出"重新登录"提示框，避免重复弹出
 let isReLogin = {
@@ -42,6 +43,11 @@ const handleReLogin = () => {
   ).then(() => {
     // 用户点击"重新登录"后重置标记
     isReLogin.show = false
+    // 调用用户状态管理中的 logout 方法，清除 token
+    useUserStore().logout().then(() => {
+      // 重新登录成功后，跳转到登录页
+      location.href = '/login'
+    })
   }).catch(() => {
     // 用户取消或关闭弹窗后重置标记
     isReLogin.show = false
