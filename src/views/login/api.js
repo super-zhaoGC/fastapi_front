@@ -2,7 +2,6 @@ import request from '@/utils/request'
 
 const login = (data) => {
   return request({
-    // 后端真实路由: POST /login/  (vite 代理会把 /api 前缀剥掉)
     url: "/login",
     headers: {
       isToken: false

@@ -112,7 +112,7 @@ request.interceptors.response.use(res => {
   // 从响应中取出业务状态码和提示信息，无则赋予默认值
   const code = res.data.code || 200
   const msg = res.data.msg || "操作失败"
-
+  console.log(res)
   // 状态码为 401 表示登录过期，弹出重新登录提示
   if (code === 401) {
     handleReLogin()

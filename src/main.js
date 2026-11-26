@@ -9,9 +9,11 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 
 import App from './App.vue'
 import router from './router'
-import './assets/css/index.css'
+import './assets/styles/index.css'
 // 只保留这一个 Pinia 实例（stores/index.js 中 createPinia 出来的那个）
 import store from './stores/index.js'
+//引入自定义图标组件
+import SvgIcon from '@/components/SvgIcon'
 
 
 
@@ -21,6 +23,9 @@ const app = createApp(App)
 app.use(store)
 app.use(router)
 app.use(ElementPlus)
+
+//注册自定义图标组件
+app.component('svg-icon', SvgIcon)
 
 //遍历ElementPlus的所有图标, 并且全部注册
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {

@@ -1,5 +1,5 @@
 import vue from '@vitejs/plugin-vue'
-
+import createSvgIcons from './svg--icon.js'
 
 /**
  * 创建 Vite 插件列表
@@ -11,12 +11,12 @@ import vue from '@vitejs/plugin-vue'
  * @param {boolean} isBuild - 是否为生产构建模式，默认 false（开发模式）
  * @returns {Array} 配置好的 Vite 插件数组
  */
-export default function createPlugins(viteEnv,isBuild=false) {
+export default function createPlugins(viteEnv, isBuild = false) {
   // 初始化插件列表，默认引入 Vue 单文件组件（SFC）编译支持插件
-  const vitePlugins=[vue()]
+  const vitePlugins = [vue()]
   // TODO: 此处为空 push，可在此按需动态添加其他插件，
   //      例如 vitePlugins.push(legacy()) 或根据 isBuild/viteEnv 条件加载
-  vitePlugins.push()
+  vitePlugins.push(createSvgIcons())
   // 返回最终插件列表，交由 Vite 配置使用
   return vitePlugins
 }
