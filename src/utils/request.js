@@ -106,13 +106,12 @@ request.interceptors.request.use(
 // 响应拦截器：统一处理后端返回的数据和错误
 request.interceptors.response.use(res => {
   // 如果请求的是文件流（blob），直接返回原始数据
-  if (res.config?.responseType === 'blob') {
+  if (['blob'].includes(res.request.responseType)) {
     return res.data
   }
   // 从响应中取出业务状态码和提示信息，无则赋予默认值
   const code = res.data.code || 200
   const msg = res.data.msg || "操作失败"
-  console.log(res)
   // 状态码为 401 表示登录过期，弹出重新登录提示
   if (code === 401) {
     handleReLogin()
@@ -126,29 +125,57 @@ request.interceptors.response.use(res => {
   // 成功时直接返回后端数据
   return res.data
 }, error => {
-  // 解构错误信息与响应对象
-  let { message, response } = error
-  // HTTP 状态码为 401 表示登录过期，弹出重新登录提示
-  if (response?.status === 401) {
+  // // 解构错误信息与响应对象
+  // let { message, response } = error
+  // // HTTP 状态码为 401 表示登录过期，弹出重新登录提示
+  // if (response?.status === 401) {
+  //   handleReLogin()
+  //   return Promise.reject("登录状态已过期，请重新登录")
+  // }
+  // // 将常见的网络错误映射为友好的中文提示
+  // const errMap = {
+  //   'Network Error': '后端接口连接异常', //网络断了
+  //   'timeout': '系统接口请求超时',
+  //   'Request failed with status code': '系统接口' + message.substr(message.length - 3) + '异常'
+  // }
+
+  // // 遍历错误映射，将匹配到的英文错误替换为中文提示
+  // Object.keys(errMap).forEach(key => {
+  //   if (message.includes(key)) {
+  //     message = errMap[key]
+  //   }
+  // })
+  // // 弹出错误提示
+  // ElMessage.error(message)
+  // return Promise.reject(error)
+  // ============ 关键优化：HTTP 层出错的场景 ============
+  const status = error.response?.status
+  // 优先取后端写在响应体里的提示，例如 {"code":500,"msg":"用户名已存在"}
+  const backendMsg = error.response?.data?.msg
+
+  if (status === 401) {
     handleReLogin()
-    return Promise.reject("登录状态已过期，请重新登录")
-  }
-  // 将常见的网络错误映射为友好的中文提示
-  const errMap = {
-    'Network Error': '后端接口连接异常', //网络断了
-    'timeout': '系统接口请求超时',
-    'Request failed with status code': '系统接口' + message.substr(message.length - 3) + '异常'
+    return Promise.reject(createBizError(401, "登录状态已过期，请重新登录"))
   }
 
-  // 遍历错误映射，将匹配到的英文错误替换为中文提示
-  Object.keys(errMap).forEach(key => {
-    if (message.includes(key)) {
-      message = errMap[key]
-    }
-  })
-  // 弹出错误提示
-  ElMessage.error(message)
-  return Promise.reject(error)
+  // 错误提示优先级：后端 msg > HTTP 状态码提示 > 网络错误映射
+  let message
+  if (backendMsg) {
+    message = backendMsg
+  } else if (status) {
+    message = `系统接口 ${status} 异常`
+  } else if (error.message?.includes('timeout')) {
+    message = '系统接口请求超时'
+  } else if (error.message?.includes('Network Error')) {
+    message = '后端接口连接异常'
+  } else {
+    message = error.message || '请求失败'
+  }
+
+  if (!error.config?.silent) {
+    ElMessage.error(message)
+  }
+  return Promise.reject(createBizError(status, message, error.response?.data))
 }
 )
 
