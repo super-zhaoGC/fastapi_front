@@ -19,6 +19,10 @@ import SvgIcon from '@/components/SvgIcon'
 // 少了这一行，<use> 引用的是不存在的 id，图标就是空白（不报错，只是看不见）。
 import 'virtual:svg-icons-register'
 
+//引入VxeUIBase组件库
+import VxeUIBase from 'vxe-pc-ui'
+import 'vxe-pc-ui/es/style.css'
+
 
 
 const app = createApp(App)
@@ -30,6 +34,8 @@ app.use(ElementPlus)
 
 //注册自定义图标组件
 app.component('svg-icon', SvgIcon)
+//注册VxeUIBase组件库
+app.use(VxeUIBase)
 
 //遍历ElementPlus的所有图标, 并且全部注册
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {

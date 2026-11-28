@@ -39,6 +39,11 @@
         </el-dropdown>
       </div>
     </el-header>
+
+    <!-- 主布局区域 -->
+    <main style="margin-left: 240px; position: relative; top: 50px">
+      <AppMain />
+    </main>
   </div>
 </template>
 
@@ -48,6 +53,7 @@ import logo from "@/assets/images/logo.png"
 import { useRoute } from "vue-router"
 import useUserStore from "@/stores/modules/userStore";
 import { ElMessageBox } from "element-plus";
+import AppMain from "@/views/layout/components/AppMain.vue";
 
 
 const route = useRoute()

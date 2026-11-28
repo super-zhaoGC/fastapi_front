@@ -58,8 +58,9 @@ const useUserStore = defineStore(
             if (avatar.indexOf("http://") === -1 && avatar.indexOf("https://") === -1) {
               if (avatar) {
                 // 有相对路径头像: 拼接静态资源前缀(后端挂在 /profile), 去掉重复的斜杠
-                const base = (import.meta.env.VITE_APP_PROFILE_API || '').replace(/\/+$/, '')
-                avatar = base + '/' + String(avatar).replace(/^\/+/, '')
+                // const base = (import.meta.env.VITE_APP_PROFILE_API || '').replace(/\/+$/, '')
+                // avatar = base + '/' + String(avatar).replace(/^\/+/, '')
+                avatar = import.meta.env.VITE_APP_BASE_API + avatar
               } else {
                 // 无头像时使用默认头像
                 avatar = defaultAvatar
